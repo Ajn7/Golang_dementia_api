@@ -36,6 +36,7 @@ func UserCreate(c *gin.Context){
 	}
 
 func ShowUser(c *gin.Context){
+	//POST method
 	//get details
 	var user struct{
 		Email    string
@@ -47,9 +48,13 @@ func ShowUser(c *gin.Context){
 	initilizers.DB.Where("email = ? AND password = ?",user.Email,user.Password).Find(&usr)
 	
 	//response
+	if usr.Id==0{
+	c.Status(400)
+}else{
 	c.JSON(200, gin.H{
 		"user": usr,
 	})
+}
 }
 
 func GetUser(c *gin.Context){
@@ -60,7 +65,13 @@ func GetUser(c *gin.Context){
 	initilizers.DB.Where("email = ? AND password = ?",email,password).Find(&user)
 	
 	//response
+	if user.Id==0{
+		c.JSON(404,gin.H{
+			"meaa":"error",
+		})
+	}else{
 	c.JSON(200, gin.H{
 		"user": user,
 	})
+   }
 }
