@@ -15,8 +15,8 @@ func init(){
 func main() {
 
 	router := gin.Default()
-	router.POST("/user", functions.UserCreate)
-	router.POST("/showuser", functions.ShowUser)
+	router.POST("/user", functions.UserCreate)//create
+	router.POST("/showuser", functions.ShowUser)//showuser
 	router.GET("/user/:email/:password", functions.GetUser)
 	// router.GET("/user/:id", functions.UserShow)
 	router.Run()

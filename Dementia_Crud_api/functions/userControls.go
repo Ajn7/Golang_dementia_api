@@ -19,8 +19,13 @@ func UserCreate(c *gin.Context){
 	
 	//create a user
 	newUser := models.User{Email:user.Email, Name:user.Name,Password:user.Password} //json
+	//check unique email or not
+    initilizers.DB.Where("email = ?",newUser.Email).Find(&newUser)
 	
-	// pass pointer of data to Create
+	//response
+	if  newUser.Id == 0 {
+       
+		// pass pointer of data to Create
 	result := initilizers.DB.Create(&newUser) 
 	if result.Error !=nil{
 		c.Status(400)
@@ -32,6 +37,15 @@ func UserCreate(c *gin.Context){
 			c.JSON(200, gin.H{
 				"newUser": newUser,
 			})
+	
+     }else{
+		c.JSON(406,gin.H{
+			"message":"email already exist",
+		})
+	 }
+
+
+	
 		
 	}
 
@@ -51,7 +65,7 @@ func ShowUser(c *gin.Context){
 	if usr.Id==0{
 	c.Status(400)
 }else{
-	c.JSON(200, gin.H{
+	c.IndentedJSON(200, gin.H{
 		"user": usr,
 	})
 }
